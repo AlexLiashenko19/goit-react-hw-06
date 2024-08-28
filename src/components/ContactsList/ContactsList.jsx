@@ -1,10 +1,10 @@
 import css from './ContactsList.module.css';
 import Contacts from '../Contacts/Contacts';
 
-const ContactsList = ({ contactState, onDeleteContact }) => {
+const ContactsList = ({ contacts, onDeleteContact }) => {
   return (
     <ul className={css.movieList}>
-      {contactState.map((state) => (
+      {contacts.map((state) => (
         <li key={state.id}>
           <Contacts state={state} onDeleteContact={onDeleteContact}/>
         </li>

@@ -1,46 +1,44 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactsList from "./components/ContactsList/ContactsList";
 import SearchBar from "./components/SearchBar/SearchBar";
-import contacts from "./db/contacts.json"
 import { nanoid } from "nanoid";
+import { useDispatch, useSelector } from "react-redux";
+import { addContact, deleteContact } from "./redux/contactsSlice";
+import { setFilterValue } from "./redux/filtersSlice";
 
 const App = () => {
-  const [contactState, setContactsState] = useState(() => {
-    const storedContacts = localStorage.getItem("contacts");
-    return storedContacts ? JSON.parse(storedContacts) : contacts;
-  });
-  const [filterValue, setFilterValue] = useState("")
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contactState));
-  }, [contactState]);
+  const contacts = useSelector((state) => state.contacts.contacts);
+  const filterValue = useSelector((state) => state.filter.filterValue);
 
- const onAddProfile = (profile) => {
-  const finallProfile = {
-    ...profile, 
-    id: nanoid()
-  }
-  setContactsState([finallProfile, ...contactState])
- }
+  const onAddContact = (profile) => {
+    const finalProfile = { ...profile, id: nanoid() };
+    dispatch(addContact(finalProfile));
+  };
 
- const onDeleteContact = (profileId) => {
-  setContactsState(contactState.filter(item => item.id !== profileId))
- }
+  const onDeleteContact = (contactsId) => {
+    dispatch(deleteContact(contactsId));
+  };
 
- const handleFilter = (event) => {
-  const value = event.target.value;
-  setFilterValue(value)
- }
+  const handleFilter = (event) => {
+    const value = event.target.value;
+    dispatch(setFilterValue(value));
+  };
 
- const filteredProfile = contactState.filter((profile) => profile.name.toLowerCase().includes(filterValue.toLowerCase()))
+  const filteredContacts = useMemo(() => {
+    return contacts.filter((contact) => {
+      return contact.name.toLowerCase().includes(filterValue.toLowerCase());
+    });
+  }, [contacts, filterValue]);
 
   return (
     <div>
       <h1>Phonebook</h1>
-      <ContactForm onAddProfile={onAddProfile}/>
-      <SearchBar filterValue={filterValue} handleFilter={handleFilter}/>
-      <ContactsList contactState={filteredProfile} onDeleteContact={onDeleteContact}/>
+      <ContactForm onAddContact={onAddContact} />
+      <SearchBar filterValue={filterValue} handleFilter={handleFilter} />
+      <ContactsList onDeleteContact={onDeleteContact} contacts={filteredContacts} />
     </div>
   );
 };

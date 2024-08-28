@@ -4,7 +4,7 @@ import css from "./ContactForm.module.css"
 import * as Yup from "yup";
 
 
-const ContactForm = ({onAddProfile}) => {
+const ContactForm = ({onAddContact}) => {
 
   const numberPattern = /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?$/;
 
@@ -28,7 +28,7 @@ const ContactForm = ({onAddProfile}) => {
       number:  values.profileNumber,
     }
 
-    onAddProfile(profileObject)
+    onAddContact(profileObject)
 		console.log(values);
 		actions.resetForm();
 	};
