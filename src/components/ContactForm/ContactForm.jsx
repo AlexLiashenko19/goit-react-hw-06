@@ -2,9 +2,17 @@ import { Field, Form, Formik } from "formik";
 import { ErrorMessage } from "formik";
 import css from "./ContactForm.module.css"
 import * as Yup from "yup";
+import { apiAddContact } from "../../redux/contactsOps";
+import { useDispatch } from "react-redux";
 
 
-const ContactForm = ({onAddContact}) => {
+const ContactForm = () => {
+
+  const dispatch = useDispatch();
+
+  const onAddContact = (profile) => {
+    dispatch(apiAddContact(profile));
+  };
 
   const numberPattern = /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?$/;
 
