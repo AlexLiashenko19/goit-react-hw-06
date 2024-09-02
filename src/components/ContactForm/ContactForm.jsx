@@ -29,7 +29,6 @@ const ContactForm = ({onAddContact}) => {
     }
 
     onAddContact(profileObject)
-		console.log(values);
 		actions.resetForm();
 	};
 

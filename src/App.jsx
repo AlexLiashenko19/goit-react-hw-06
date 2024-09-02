@@ -1,25 +1,30 @@
-import { useMemo } from "react";
+import { useEffect } from "react";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactsList from "./components/ContactsList/ContactsList";
 import SearchBar from "./components/SearchBar/SearchBar";
-import { nanoid } from "nanoid";
 import { useDispatch, useSelector } from "react-redux";
-import { addContact, deleteContact } from "./redux/contactsSlice";
-import { setFilterValue } from "./redux/filtersSlice";
+import { setFilterValue } from "./redux/filter/filtersSlice";
+import { apiAddContact, apiDeleteContact, apiGetAllContacts } from "./redux/сontacts/contactsOps";
+import { selectFilteredContacts, selectorLoading } from "./redux/сontacts/contact.selector";
+import { selectFilter } from "./redux/filter/filter.select";
 
 const App = () => {
   const dispatch = useDispatch();
 
-  const contacts = useSelector((state) => state.contacts.contacts);
-  const filterValue = useSelector((state) => state.filter.filterValue);
+  const filterValue = useSelector(selectFilter);
+  const isLoading = useSelector(selectorLoading);
+  const filteredContacts = useSelector(selectFilteredContacts)
+
+  useEffect(() => {
+    dispatch(apiGetAllContacts())
+  }, [dispatch])
 
   const onAddContact = (profile) => {
-    const finalProfile = { ...profile, id: nanoid() };
-    dispatch(addContact(finalProfile));
+    dispatch(apiAddContact(profile));
   };
 
   const onDeleteContact = (contactsId) => {
-    dispatch(deleteContact(contactsId));
+    dispatch(apiDeleteContact(contactsId));
   };
 
   const handleFilter = (event) => {
@@ -27,18 +32,12 @@ const App = () => {
     dispatch(setFilterValue(value));
   };
 
-  const filteredContacts = useMemo(() => {
-    return contacts.filter((contact) => {
-      return contact.name.toLowerCase().includes(filterValue.toLowerCase());
-    });
-  }, [contacts, filterValue]);
-
   return (
     <div>
       <h1>Phonebook</h1>
       <ContactForm onAddContact={onAddContact} />
       <SearchBar filterValue={filterValue} handleFilter={handleFilter} />
-      <ContactsList onDeleteContact={onDeleteContact} contacts={filteredContacts} />
+      {isLoading ? <p>Loading...</p> : <ContactsList onDeleteContact={onDeleteContact} contacts={filteredContacts} />}
     </div>
   );
 };

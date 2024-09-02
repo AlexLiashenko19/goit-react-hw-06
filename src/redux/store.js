@@ -9,10 +9,11 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
+
 import storage from 'redux-persist/lib/storage'
 
-import { contactsReducer } from "./contactsSlice"
-import { filterReducer } from "./filtersSlice"
+import { contactsReducer } from "./сontacts/contactsSlice"
+import { filterReducer } from "./filter/filtersSlice"
 
 
 const contactsConfig = {
