@@ -4,7 +4,7 @@ import ContactsList from "./components/ContactsList/ContactsList";
 import SearchBar from "./components/SearchBar/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilterValue } from "./redux/filter/filtersSlice";
-import { apiAddContact, apiDeleteContact, apiGetAllContacts } from "./redux/сontacts/contactsOps";
+import { apiAddContact, apiDeleteContact, apiGetAllContacts } from "./redux/contactsOps";
 import { selectFilteredContacts, selectorLoading } from "./redux/сontacts/contact.selector";
 import { selectFilter } from "./redux/filter/filter.select";
 
